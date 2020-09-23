@@ -2,34 +2,35 @@ package com.github.bazoocaze.vulkancpu4j.util;
 
 import java.util.concurrent.Callable;
 
-public class UncheckedException extends RuntimeException {
+public class UncheckedException {
 
-    public UncheckedException(Throwable ex) {
-        super(ex);
+    private UncheckedException() {
+        // static class
     }
 
     public static <T> T unchecked(Callable<T> callable) {
         try {
             return callable.call();
-        } catch (RuntimeException ex) {
-            throw ex;
         } catch (Exception ex) {
-            throw new UncheckedException(ex);
+            throw throwAsUnchecked(ex);
         }
     }
 
     public static void unchecked(ThrowingRunnable throwingRunnable) {
         try {
             throwingRunnable.run();
-        } catch (RuntimeException ex) {
-            throw ex;
         } catch (Exception ex) {
-            throw new UncheckedException(ex);
+            throw throwAsUnchecked(ex);
         }
     }
 
     public interface ThrowingRunnable {
 
         void run() throws Exception;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Throwable> RuntimeException throwAsUnchecked(Exception exception) throws E {
+        throw (E) exception;
     }
 }

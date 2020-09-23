@@ -20,8 +20,6 @@ SOFTWARE.
 
 package com.github.bazoocaze.vulkancpu4j.util;
 
-import static com.github.bazoocaze.vulkancpu4j.util.UncheckedException.unchecked;
-
 public class FpsControl {
 
     private final Stopwatch elapsed;
@@ -88,7 +86,7 @@ public class FpsControl {
     }
 
     private void threadSleep(int timeToSleep) {
-        unchecked(() -> Thread.sleep(timeToSleep));
+        UncheckedException.unchecked(() -> Thread.sleep(timeToSleep));
     }
 
     private void reset() {

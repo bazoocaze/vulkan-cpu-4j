@@ -27,10 +27,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Benchmark {
+public class MyBenchmark {
 
     private static final int PASS_WARMUP = 0;
     private static final int PASS_PROPER = 2;
+    private static final int MAX_PADDING = 50;
     private static final Action EMPTY_ACTION = () -> {
     };
     public static final int MINIMUM_WORK_TIME_MS = 500;
@@ -41,25 +42,15 @@ public class Benchmark {
         return new Builder();
     }
 
-    public static double measureAction(Action action, int workSize) {
-        return runAction(action, workSize);
-    }
-
-    public static double measureAction(Action action, int workSize, int minMilliseconds) {
-        return runAction(action, workSize, minMilliseconds);
-    }
-
     private static double runAction(Action action, int workSize) {
         Stopwatch timer = new Stopwatch();
-        try {
-            timer.start();
+        timer.start();
+        UncheckedException.unchecked(() -> {
             for (int p = 0; p < workSize; p++) {
                 action.run();
             }
-            timer.stop();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        });
+        timer.stop();
         return timer.elapsed().totalSeconds / workSize;
     }
 
@@ -68,7 +59,6 @@ public class Benchmark {
         int countTimerRepetitions = 0;
         Stopwatch repetitionsTimer = new Stopwatch();
         repetitionsTimer.start();
-
         do {
             cumulative += runAction(action, workSize);
             countTimerRepetitions++;
@@ -91,13 +81,12 @@ public class Benchmark {
 
         PrintStream output = new PrintStream(outputStream);
 
-        System.gc();
-
         output.format("----- BEGIN BENCHMARK: %s -----%n", title);
 
         for (int numPass = 0; numPass <= PASS_PROPER; numPass++) {
             // Measure loop overhead
             emptyDelegateTime = runAction(EMPTY_ACTION, workSize, MINIMUM_WORK_TIME_MS);
+
             if (numPass == PASS_PROPER) {
                 output.format("Loop overhead: time=%s%n", TimeFormatter.format(emptyDelegateTime));
             }
@@ -124,7 +113,8 @@ public class Benchmark {
                         if (workTime > (1000 * emptyDelegateTime)) {
                             output.format("%s: time=%s%n", workDescription, TimeFormatter.format(workTime));
                         } else {
-                            output.format("%s: time=%s corrected=%s%n", workDescription, TimeFormatter.format(workTime), TimeFormatter.format(corrected));
+                            output.format("%s: time=%s corrected=%s%n", workDescription,
+                                    TimeFormatter.format(workTime), TimeFormatter.format(corrected));
                         }
                     }
                 }
@@ -135,8 +125,8 @@ public class Benchmark {
     }
 
     private static List<BenchmarkItem> formatDescriptions(List<BenchmarkItem> inputActions) {
-        int size = inputActions.stream().map(i -> i.description.length()).max(Integer::compareTo).orElse(30);
-        int padDesc = Math.min(30, size);
+        int size = inputActions.stream().map(i -> i.description.length()).max(Integer::compareTo).orElse(MAX_PADDING);
+        int padDesc = Math.min(MAX_PADDING, size);
         return inputActions.stream()
                 .map(i -> new BenchmarkItem(pad(i.description, padDesc), i.action))
                 .collect(Collectors.toList());
@@ -199,7 +189,7 @@ public class Benchmark {
         }
 
         public void run() {
-            Benchmark.run(actions, this.workSize, this.title, this.outputStream);
+            MyBenchmark.run(actions, this.workSize, this.title, this.outputStream);
         }
     }
 }
