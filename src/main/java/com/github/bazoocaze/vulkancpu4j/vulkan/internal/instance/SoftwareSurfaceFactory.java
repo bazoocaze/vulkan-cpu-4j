@@ -4,6 +4,7 @@ import com.github.bazoocaze.vulkancpu4j.util.OutRef;
 import com.github.bazoocaze.vulkancpu4j.vulkan.VkJavaSwingSurfaceCreateInfoEMU;
 import com.github.bazoocaze.vulkancpu4j.vulkan.VkSurfaceKHR;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkResult;
+import com.github.bazoocaze.vulkancpu4j.vulkan.internal.surface.SoftwareJavaSwingSurface;
 
 public class SoftwareSurfaceFactory {
 

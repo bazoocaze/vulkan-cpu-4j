@@ -81,4 +81,9 @@ public class DummyPhysicalDevice implements VkPhysicalDevice {
         device.set(new DummyDevice(this, createInfo));
         return VkResult.VK_SUCCESS;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

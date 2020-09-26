@@ -26,20 +26,15 @@ import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkBool32;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkPresentModeKHR;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkResult;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkSubpassContents;
-import com.github.bazoocaze.vulkancpu4j.vulkan.internal.VkArrayUtil;
 import com.github.bazoocaze.vulkancpu4j.vulkan.internal.VkPreconditions;
 import com.github.bazoocaze.vulkancpu4j.vulkan.internal.VulkanContext;
 
 public class Vulkan {
 
-    private Vulkan() {
-        // static class
-    }
-
     public static final int VK_SUBPASS_EXTERNAL = 0xFFFFFFF;
 
-    public static <T> T VK_NULL_HANDLE() {
-        return null;
+    private Vulkan() {
+        // static class
     }
 
     /**
@@ -324,35 +319,30 @@ public class Vulkan {
     /**
      * Returns up to requested number of global layer properties.
      * <p>
-     * If pProperties is NULL, then the number of layer properties available is returned in pPropertyCount.
-     * Otherwise, pPropertyCount must point to a variable set by the user to the number of elements in the
-     * pProperties array, and on return the variable is overwritten with the number of structures actually
-     * written to pProperties. If pPropertyCount is less than the number of layer properties available, at
-     * most pPropertyCount structures will be written. If pPropertyCount is smaller than the number of
+     * If properties is NULL, then the number of layer properties available is returned in propertyCount.
+     * Otherwise, propertyCount must point to a variable set by the user to the number of elements in the
+     * properties array, and on return the variable is overwritten with the number of structures actually
+     * written to properties. If propertyCount is less than the number of layer properties available, at
+     * most propertyCount structures will be written. If propertyCount is smaller than the number of
      * layers available, VK_INCOMPLETE will be returned instead of VK_SUCCESS, to indicate that not all the
      * available layer properties were returned.
      * <p>
      * The list of available layers may change at any time due to actions outside of the Vulkan
      * implementation, so two calls to vkEnumerateInstanceLayerProperties with the same parameters may
-     * return different results, or retrieve different pPropertyCount values or pProperties contents. Once
+     * return different results, or retrieve different propertyCount values or properties contents. Once
      * an instance has been created, the layers enabled for that instance will continue to be enabled and
      * valid for the lifetime of that instance, even if some of them become unavailable for future instances.
      *
-     * @param pPropertyCount is a pointer to an integer related to the number of layer properties available
-     *                       or queried, as described below.
-     * @param pProperties    is either NULL or a pointer to an array of VkLayerProperties structures.
+     * @param propertyCount is a pointer to an integer related to the number of layer properties available
+     *                      or queried, as described below.
+     * @param properties    is either NULL or a pointer to an array of VkLayerProperties structures.
      * @return On success, this command returns: {@link VkResult#VK_SUCCESS}, {@link VkResult#VK_INCOMPLETE}. On
-     * failure, this command returns: {@link VkResult#VK_ERROR_OUT_OF_HOST_MEMORY}, {@link VkResult#VK_ERROR_OUT_OF_DEVICE_MEMORY}
+     * failure, this command returns: {@link VkResult#VK_ERROR_OUT_OF_HOST_MEMORY},
+     * {@link VkResult#VK_ERROR_OUT_OF_DEVICE_MEMORY}
      */
-    public static VkResult vkEnumerateInstanceLayerProperties(ByRef<Integer> pPropertyCount, VkLayerProperties[] pProperties) {
-        VkLayerProperties[] layerProperties = new VkLayerProperties[]{
-                new VkLayerProperties("VK_LAYER_KHRONOS_validation", VkApiVersion.VK_MAKE_VERSION(1, 0, 131), 1,
-                        "VK_LAYER_KHRONOS_validation"),
-                new VkLayerProperties("VK_LAYER_LUNARG_standard_validation",
-                        VkApiVersion.VK_MAKE_VERSION(1, 0, 131), 1,
-                        "LunarG Standard Validation Layer")
-        };
-        return VkArrayUtil.copyArray(layerProperties, pPropertyCount, pProperties);
+    public static VkResult vkEnumerateInstanceLayerProperties(ByRef<Integer> propertyCount,
+                                                              VkLayerProperties[] properties) {
+        return VulkanContext.DEFAULT.instanceFactory().enumerateInstanceLayerProperties(propertyCount, properties);
     }
 
     public static VkResult vkCreateJavaSwingSurfaceEMU(VkInstance instance,

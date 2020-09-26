@@ -44,6 +44,10 @@ public enum VkBool32 {
         this.value = value;
     }
 
+    public static VkBool32 from(boolean input) {
+        return input ? VK_TRUE : VK_FALSE;
+    }
+
     public int value() {
         return value;
     }

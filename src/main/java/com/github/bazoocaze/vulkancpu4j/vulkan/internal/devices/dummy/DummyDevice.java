@@ -218,4 +218,9 @@ public class DummyDevice implements VkDevice {
     public void destroy(VkAllocationCallbacks allocator) {
         // do nothing
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

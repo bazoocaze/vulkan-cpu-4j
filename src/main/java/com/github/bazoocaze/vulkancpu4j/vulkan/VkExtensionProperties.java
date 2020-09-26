@@ -9,4 +9,8 @@ public class VkExtensionProperties {
         this.specVersion = specVersion;
         this.extensionName = extensionName;
     }
+
+    public String getExtensionName() {
+        return this.extensionName;
+    }
 }

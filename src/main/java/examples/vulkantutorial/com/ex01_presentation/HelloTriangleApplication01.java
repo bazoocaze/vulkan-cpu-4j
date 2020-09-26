@@ -8,6 +8,7 @@ import com.github.bazoocaze.vulkancpu4j.vulkan.data.*;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.*;
 import com.github.bazoocaze.vulkancpu4j.vulkan.flags.*;
 import examples.FailureException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
@@ -20,6 +21,7 @@ import static com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkResult.VK_SUCCESS;
 
 public class HelloTriangleApplication01 {
 
+    private static final Logger logger = LoggerFactory.getLogger(HelloTriangleApplication01.class);
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
 
@@ -242,9 +244,11 @@ public class HelloTriangleApplication01 {
 
         for (VkPhysicalDevice testPhysicalDevice : physicalDevices) {
             if (isDeviceSuitable(testPhysicalDevice)) {
+                logger.info("Selected physical device: {}", testPhysicalDevice);
                 this.physicalDevice = testPhysicalDevice;
                 break;
             }
+            logger.info("Rejected physical device: {}", testPhysicalDevice);
         }
 
         if (physicalDevice == null) {

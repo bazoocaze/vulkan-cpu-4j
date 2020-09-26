@@ -1,11 +1,8 @@
-package com.github.bazoocaze.vulkancpu4j.vulkan.internal.instance;
+package com.github.bazoocaze.vulkancpu4j.vulkan.internal.surface;
 
 import com.github.bazoocaze.vulkancpu4j.util.ByRef;
 import com.github.bazoocaze.vulkancpu4j.util.OutRef;
-import com.github.bazoocaze.vulkancpu4j.vulkan.VkJavaSwingSurfaceCreateInfoEMU;
-import com.github.bazoocaze.vulkancpu4j.vulkan.VkSurfaceCapabilitiesKHR;
-import com.github.bazoocaze.vulkancpu4j.vulkan.VkSurfaceFormatKHR;
-import com.github.bazoocaze.vulkancpu4j.vulkan.VkSurfaceKHR;
+import com.github.bazoocaze.vulkancpu4j.vulkan.*;
 import com.github.bazoocaze.vulkancpu4j.vulkan.data.VkExtent2D;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkColorSpaceKHR;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkFormat;
@@ -13,6 +10,7 @@ import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkPresentModeKHR;
 import com.github.bazoocaze.vulkancpu4j.vulkan.enums.VkResult;
 import com.github.bazoocaze.vulkancpu4j.vulkan.flags.*;
 import com.github.bazoocaze.vulkancpu4j.vulkan.internal.VkArrayUtil;
+import com.github.bazoocaze.vulkancpu4j.vulkan.internal.instance.SoftwareInstance;
 
 import javax.swing.*;
 
@@ -56,7 +54,7 @@ public class SoftwareJavaSwingSurface implements VkSurfaceKHR {
     }
 
     @Override
-    public VkResult presentImage(SoftwareImage image, VkExtent2D imageExtent) {
+    public VkResult presentImage(VkImage image, VkExtent2D imageExtent) {
         return VkResult.VK_ERROR_DEVICE_LOST;
     }
 
