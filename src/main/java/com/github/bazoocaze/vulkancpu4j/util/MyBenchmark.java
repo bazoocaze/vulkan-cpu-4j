@@ -35,6 +35,7 @@ public class MyBenchmark {
     private static final Action EMPTY_ACTION = () -> {
     };
     public static final int MINIMUM_WORK_TIME_MS = 500;
+    public static final int NANOS_IN_SECOND = 1000000000;
 
     private static int benchNumber = 0;
 
@@ -45,13 +46,17 @@ public class MyBenchmark {
     private static double runAction(Action action, int workSize) {
         Stopwatch timer = new Stopwatch();
         timer.start();
-        UncheckedException.unchecked(() -> {
+        UncheckedExceptions.unchecked(() -> {
             for (int p = 0; p < workSize; p++) {
                 action.run();
             }
         });
         timer.stop();
-        return timer.elapsed().totalSeconds / workSize;
+        return fractionalSeconds(timer) / workSize;
+    }
+
+    private static double fractionalSeconds(Stopwatch timer) {
+        return (double) timer.elapsed().toNanos() / (double) NANOS_IN_SECOND;
     }
 
     private static double runAction(Action action, int workSize, int minMilliseconds) {

@@ -17,7 +17,7 @@ import java.util.SplittableRandom;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.bazoocaze.vulkancpu4j.util.MyBenchmark.aNewBenchmark;
-import static com.github.bazoocaze.vulkancpu4j.util.UncheckedException.unchecked;
+import static com.github.bazoocaze.vulkancpu4j.util.UncheckedExceptions.unchecked;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)

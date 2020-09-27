@@ -2,9 +2,9 @@ package com.github.bazoocaze.vulkancpu4j.util;
 
 import java.util.concurrent.Callable;
 
-public class UncheckedException {
+public class UncheckedExceptions {
 
-    private UncheckedException() {
+    private UncheckedExceptions() {
         // static class
     }
 

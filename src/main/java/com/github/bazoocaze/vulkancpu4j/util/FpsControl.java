@@ -86,7 +86,7 @@ public class FpsControl {
     }
 
     private void threadSleep(int timeToSleep) {
-        UncheckedException.unchecked(() -> Thread.sleep(timeToSleep));
+        UncheckedExceptions.unchecked(() -> Thread.sleep(timeToSleep));
     }
 
     private void reset() {

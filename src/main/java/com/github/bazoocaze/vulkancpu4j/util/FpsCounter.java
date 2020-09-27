@@ -68,8 +68,8 @@ public class FpsCounter {
     }
 
     private void generateReport() {
-        double cumulativeMs = cumulative.elapsed().totalMilliseconds;
-        double elapsedMs = elapsed.elapsed().totalMilliseconds;
+        double cumulativeMs = cumulative.elapsed().toMillis();
+        double elapsedMs = elapsed.elapsed().toMillis();
         double frames = Math.max(frameCounter, 1);
 
         cumulativeMs = Math.max(cumulativeMs, MIN_TIME_MS);

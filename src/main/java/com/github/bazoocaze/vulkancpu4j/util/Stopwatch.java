@@ -20,6 +20,9 @@ SOFTWARE.
 
 package com.github.bazoocaze.vulkancpu4j.util;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 public class Stopwatch {
 
     private static final double NANOS_IN_MILLI = 1000000.0;
@@ -59,8 +62,8 @@ public class Stopwatch {
                 + ((this.running) ? (currentTime() - this.startTime) : 0);
     }
 
-    public Elapsed elapsed() {
-        return new Elapsed(currentAccumulated());
+    public Duration elapsed() {
+        return Duration.of(currentAccumulated(), ChronoUnit.NANOS);
     }
 
     public double elapsedMilliseconds() {
@@ -76,20 +79,5 @@ public class Stopwatch {
         stop();
         this.accumulated = 0;
         start();
-    }
-
-    public static class Elapsed {
-
-        public static final double NANOS_IN_SEC = 1000000000.0;
-
-        public final long totalNanos;
-        public final double totalSeconds;
-        public final double totalMilliseconds;
-
-        public Elapsed(long nanos) {
-            this.totalNanos = nanos;
-            this.totalSeconds = totalNanos / NANOS_IN_SEC;
-            this.totalMilliseconds = totalNanos / NANOS_IN_MILLI;
-        }
     }
 }
