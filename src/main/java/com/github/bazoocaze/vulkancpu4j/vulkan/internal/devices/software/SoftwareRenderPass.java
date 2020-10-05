@@ -12,4 +12,8 @@ public class SoftwareRenderPass implements VkRenderPass {
         this.device = device;
         this.createInfo = createInfo;
     }
+
+    public void destroy() {
+        // TODO: SoftwareRenderPass.destroy
+    }
 }

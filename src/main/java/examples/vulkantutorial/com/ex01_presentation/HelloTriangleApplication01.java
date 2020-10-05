@@ -646,10 +646,9 @@ public class HelloTriangleApplication01 {
         Vulkan.vkWaitForFences(device, 1, new VkFence[]{inFlightFences[currentFrame]}, VkBool32.VK_TRUE, Long.MAX_VALUE);
 
         final ByRef<Integer> refImageIndex = new ByRef<>();
-        int imageIndex;
         Vulkan.vkAcquireNextImageKHR(device, swapChain, Long.MAX_VALUE,
                 imageAvailableSemaphores[currentFrame], null, refImageIndex);
-        imageIndex = refImageIndex.get();
+        int imageIndex = refImageIndex.get();
 
         if (imagesInFlight[imageIndex] != null) {
             Vulkan.vkWaitForFences(device, 1, new VkFence[]{imagesInFlight[imageIndex]},

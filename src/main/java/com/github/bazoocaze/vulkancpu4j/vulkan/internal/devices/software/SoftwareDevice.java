@@ -91,118 +91,148 @@ public class SoftwareDevice implements VkDevice {
     public VkResult createShaderModule(VkShaderModuleCreateInfo createInfo,
                                        VkAllocationCallbacks allocator,
                                        OutRef<VkShaderModule> shaderModule) {
-        return VkResult.VK_NOT_READY;
+        shaderModule.set(new SoftwareShaderModule(this, createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
     public VkResult createPipelineLayout(VkPipelineLayoutCreateInfo createInfo,
                                          VkAllocationCallbacks allocator,
                                          OutRef<VkPipelineLayout> pipelineLayout) {
-        return VkResult.VK_NOT_READY;
+        pipelineLayout.set(new SoftwarePipelineLayout(this, createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
-    public VkResult createGraphicsPipelines(VkPipelineCache pipelineCache, int createInfoCount, VkGraphicsPipelineCreateInfo[] createInfos, VkAllocationCallbacks allocator, VkPipeline[] pipelines) {
-        return VkResult.VK_NOT_READY;
+    public VkResult createGraphicsPipelines(VkPipelineCache pipelineCache,
+                                            int createInfoCount,
+                                            VkGraphicsPipelineCreateInfo[] createInfos,
+                                            VkAllocationCallbacks allocator,
+                                            VkPipeline[] pipelines) {
+        // TODO: treatment of pipelineCache
+        for (int i = 0; i < createInfoCount; i++) {
+            final int pos = i;
+            VkResult result = SoftwareGraphicsPipeline.create(this, createInfos[i], p -> pipelines[pos] = p);
+            if (result != VkResult.VK_SUCCESS) {
+                return result;
+            }
+        }
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
     public void destroyShaderModule(VkShaderModule shaderModule, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        // TODO: destroyShaderModule
     }
 
     @Override
-    public VkResult createFramebuffer(VkFramebufferCreateInfo createInfo, VkAllocationCallbacks allocator, OutRef<VkFramebuffer> frameBuffer) {
-        return VkResult.VK_NOT_READY;
+    public VkResult createFramebuffer(VkFramebufferCreateInfo createInfo,
+                                      VkAllocationCallbacks allocator,
+                                      OutRef<VkFramebuffer> frameBuffer) {
+        frameBuffer.set(new SoftwareFrameBuffer(createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
-    public VkResult createCommandPool(VkCommandPoolCreateInfo createInfo, VkAllocationCallbacks allocator, OutRef<VkCommandPool> commandPool) {
-        return VkResult.VK_NOT_READY;
+    public VkResult createCommandPool(VkCommandPoolCreateInfo createInfo,
+                                      VkAllocationCallbacks allocator,
+                                      OutRef<VkCommandPool> commandPool) {
+        commandPool.set(new SoftwareCommandPool(createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
-    public VkResult allocateCommandBuffers(VkCommandBufferAllocateInfo allocateInfo, VkCommandBuffer[] commandBuffers) {
-        return VkResult.VK_NOT_READY;
+    public VkResult allocateCommandBuffers(VkCommandBufferAllocateInfo allocateInfo,
+                                           VkCommandBuffer[] commandBuffers) {
+        return ((SoftwareCommandPool) allocateInfo.commandPool).allocateCommandBuffers(allocateInfo, commandBuffers);
     }
 
     @Override
-    public VkResult createSemaphore(VkSemaphoreCreateInfo createInfo, VkAllocationCallbacks allocator, OutRef<VkSemaphore> semaphore) {
-        return VkResult.VK_NOT_READY;
+    public VkResult createSemaphore(VkSemaphoreCreateInfo createInfo,
+                                    VkAllocationCallbacks allocator,
+                                    OutRef<VkSemaphore> semaphore) {
+        semaphore.set(new SoftwareSemaphore(createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
-    public VkResult createFence(VkFenceCreateInfo createInfo, VkAllocationCallbacks allocator, OutRef<VkFence> fence) {
-        return VkResult.VK_NOT_READY;
+    public VkResult createFence(VkFenceCreateInfo createInfo,
+                                VkAllocationCallbacks allocator,
+                                OutRef<VkFence> fence) {
+        fence.set(new SoftwareFence(createInfo));
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
     public VkResult waitForFences(int fenceCount, VkFence[] fences, VkBool32 waitAll, long timeout) {
-        throw new UnsupportedOperationException("Not implemented");
+        return SoftwareDeviceSincronization.waitForFences(fenceCount, fenceCount, waitAll, timeout);
     }
 
     @Override
-    public VkResult acquireNextImageKHR(VkSwapchainKHR swapChain, long timeout, VkSemaphore semaphore, VkFence fence, OutRef<Integer> imageIndex) {
-        throw new UnsupportedOperationException("Not implemented");
+    public VkResult acquireNextImageKHR(VkSwapchainKHR swapChain, long timeout, VkSemaphore semaphore,
+                                        VkFence fence,
+                                        OutRef<Integer> imageIndex) {
+        return swapChain.acquireNextImageKHR(timeout, semaphore, fence, imageIndex);
     }
 
     @Override
     public VkResult resetFences(int fenceCount, VkFence[] fences) {
-        throw new UnsupportedOperationException("Not implemented");
+        return SoftwareDeviceSincronization.resetFences(fenceCount, fences);
     }
 
     @Override
     public VkResult deviceWaitIdle() {
-        throw new UnsupportedOperationException("Not implemented");
+        // TODO: deviceWaitIdle
+        return VkResult.VK_SUCCESS;
     }
 
     @Override
     public void destroySemaphore(VkSemaphore semaphore, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareSemaphore) semaphore).destroy();
     }
 
     @Override
     public void destroyFence(VkFence fence, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareFence) fence).destroy();
     }
 
     @Override
     public void destroyCommandPool(VkCommandPool commandPool, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareCommandPool) commandPool).destroy();
     }
 
     @Override
     public void destroyFramebuffer(VkFramebuffer framebuffer, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareFrameBuffer) framebuffer).destroy();
     }
 
     @Override
     public void destroyPipeline(VkPipeline pipeline, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwarePipeline) pipeline).destroy();
     }
 
     @Override
     public void destroyPipelineLayout(VkPipelineLayout pipelineLayout, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwarePipelineLayout) pipelineLayout).destroy();
     }
 
     @Override
     public void destroyRenderPass(VkRenderPass renderPass, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareRenderPass) renderPass).destroy();
     }
 
     @Override
     public void destroyImageView(VkImageView imageView, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareImageView) imageView).destroy();
     }
 
     @Override
     public void destroySwapchainKHR(VkSwapchainKHR swapChain, VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        ((SoftwareSwapchain) swapChain).destroy();
     }
 
     @Override
     public void destroy(VkAllocationCallbacks allocator) {
-        throw new UnsupportedOperationException("Not implemented");
+        // TODO: SoftwareDevice.destroy
     }
 }

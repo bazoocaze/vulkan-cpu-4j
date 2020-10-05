@@ -23,4 +23,8 @@ public class SoftwareImageView implements VkImageView {
         view.set(new SoftwareImageView(device, createInfo));
         return VkResult.VK_SUCCESS;
     }
+
+    public void destroy() {
+        // TODO: SoftwareImageView.destroy
+    }
 }

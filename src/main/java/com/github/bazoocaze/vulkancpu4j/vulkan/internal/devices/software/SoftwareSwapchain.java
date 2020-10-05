@@ -46,7 +46,14 @@ public class SoftwareSwapchain implements VkSwapchainKHR {
     }
 
     @Override
-    public VkResult acquireNextImageKHR(long timeout, VkSemaphore semaphore, VkFence fence, OutRef<Integer> imageIndex) {
-        return null;
+    public VkResult acquireNextImageKHR(long timeout, VkSemaphore semaphore, VkFence fence,
+                                        OutRef<Integer> imageIndex) {
+        // TODO:  acquireNextImageKHR
+        imageIndex.set(0);
+        return VkResult.VK_SUCCESS;
+    }
+
+    public void destroy() {
+        // TODO: SoftwareSwapchain.destroy
     }
 }
