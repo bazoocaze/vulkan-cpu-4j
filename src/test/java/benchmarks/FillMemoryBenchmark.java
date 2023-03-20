@@ -67,6 +67,7 @@ public class FillMemoryBenchmark {
                 .withAction("fill_intArray_ArraysFill", this::fill_intArray_ArraysFill)
                 .withAction("fill_floatByteBuffer", this::fill_floatByteBuffer)
                 .withAction("fill_intBuffer", this::fill_intBuffer)
+                .withAction("fill_intBuffer_withSupplier_baseline", this::fill_intBuffer_withSupplier_baseline)
                 .withAction("fill_intByteBuffer", this::fill_intByteBuffer)
 //                .withAction("fill_intBuffer_RandomDefault", this::fill_intBuffer_RandomDefault)
                 .withAction("fill_intBuffer_RandomSplittable", this::fill_intBuffer_RandomSplittable)
@@ -132,6 +133,11 @@ public class FillMemoryBenchmark {
     @Benchmark
     public void fill_floatByteBuffer() {
         fill_floatBuffer(floatByteBuffer, 0, pixels, 1f);
+    }
+
+    @Benchmark
+    public void fill_intBuffer_withSupplier_baseline() {
+        fill_intBuffer_withSupplier(intByteBuffer, 0, pixels, () -> 0xA511225A);
     }
 
     private void fill_intBuffer(final IntBuffer intBuffer, final int offset, final int size, final int color) {
